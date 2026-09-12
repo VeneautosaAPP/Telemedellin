@@ -36,8 +36,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-const LOGO_URL = "/manus-storage/logo_telemedellin_oficial_84dfd126.png";
-const PARK_URL = "/manus-storage/canal_parque_alcaldia_a88ebbfd.jpg";
+const LOGO_URL = "/logo_telemedellin_oficial_84dfd126.png";
+const PARK_URL = "/20210614-Telemedellin-1.jpg";
 
 /** Cuando el video esté listo, reemplace el valor vacío por el ID de YouTube. */
 const YOUTUBE_VIDEO_ID = "L6DBHjF9s0o";
