@@ -322,7 +322,7 @@ img { display: block; max-width: 100%; }
   position: relative;
   z-index: 3;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   background: var(--ink);
   color: white;
 }
@@ -573,7 +573,7 @@ footer { background:#1d1d1b; color:white; padding:45px 0; }
   .hero-copy { text-align:center; }
   .hero-copy > p { margin-inline:auto; }.hero-actions{justify-content:center}
   .hero-collage { width:min(640px,100%); margin:0 auto; }
-  .speaker-strip { grid-template-columns:repeat(2,minmax(145px,1fr)); overflow-x:auto; }
+  .speaker-strip { grid-template-columns:repeat(5,minmax(145px,1fr)); overflow-x:auto; }
   .context-grid, .route-grid { grid-template-columns:1fr; }
   .context-image { min-height:500px; order:2; }.context-copy{order:1}
   .diagnostic-heading-row { grid-template-columns:1fr; }.score-card{max-width:280px}
@@ -751,7 +751,7 @@ footer { background:#1d1d1b; color:white; padding:45px 0; }
   backdrop-filter: blur(18px);
 }
 .presentation-header > img { width: 160px; }
-.presentation-progress { height: 100%; display: grid; grid-template-columns: repeat(2,1fr); }
+.presentation-progress { height: 100%; display: grid; grid-template-columns: repeat(5,1fr); }
 .presentation-progress button { position: relative; display: flex; align-items: center; justify-content: center; gap: 6px; border: 0; background: transparent; color: #7b7b73; font-size: 10px; font-weight: 800; }
 .presentation-progress button span { color: var(--tm-orange); font-size: 8px; }
 .presentation-progress button::after { content: ""; position: absolute; left: 20%; right: 20%; bottom: 0; height: 3px; background: var(--tm-orange); transform: scaleX(0); transition: transform 200ms cubic-bezier(.23,1,.32,1); }
