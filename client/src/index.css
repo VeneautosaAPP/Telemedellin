@@ -346,6 +346,10 @@ img { display: block; max-width: 100%; }
 .section-diagnostic { color: white; background: var(--ink); }
 .section-findings { background: white; }
 .section-route { background: #eef5cf; }
+.section-video { background: var(--paper); }
+.section-video .video-column { margin-top: 0; max-width: 1080px; margin-left: auto; margin-right: auto; }
+.route-quote { align-self: start; padding: 32px; background: var(--ink); color: #f2f2eb; }
+.route-quote blockquote { margin: 0; font-family: "Archivo", sans-serif; font-size: 19px; line-height: 1.5; }
 .eyebrow {
   display: flex;
   align-items: center;

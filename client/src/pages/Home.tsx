@@ -651,6 +651,16 @@ export default function Home() {
           </div>
         </section>
 
+        <section id="video" className="section section-video">
+          <div className="section-inner">
+            <Reveal className="video-column" delay={0.12}>
+              <div className="video-heading"><Video size={20} /><span>Momento audiovisual</span></div>
+              <VideoBlock />
+              <div className="video-instruction"><Lightbulb size={18} /><p>Cuando finalice la edición, solo se debe añadir el ID del video de YouTube en la constante <code>YOUTUBE_VIDEO_ID</code>.</p></div>
+            </Reveal>
+          </div>
+        </section>
+
         <section id="estructura" data-speaker className="section section-structure">
           <div className="section-inner">
             <Reveal><Eyebrow number="02" speaker="Voz 2">Estructura TM 2026</Eyebrow></Reveal>
@@ -834,10 +844,7 @@ export default function Home() {
                   })}
                 </div>
               </div>
-              <Reveal className="video-column" delay={0.12}>
-                <div className="video-heading"><Video size={20} /><span>Momento audiovisual · cierre colectivo</span></div>
-                <VideoBlock />
-                <div className="video-instruction"><Lightbulb size={18} /><p>Cuando finalice la edición, solo se debe añadir el ID del video de YouTube en la constante <code>YOUTUBE_VIDEO_ID</code>.</p></div>
+              <Reveal className="route-quote" delay={0.12}>
                 <blockquote>La meta no es “llenar una matriz”: es usar la evidencia para cuidar el talento que hace posible la misión pública del canal.</blockquote>
               </Reveal>
             </div>
