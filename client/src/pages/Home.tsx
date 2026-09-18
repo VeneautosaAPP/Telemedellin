@@ -414,7 +414,6 @@ function PresentationMode({ onClose }: { onClose: () => void }) {
     <div className="presentation-layout context-slide" key="contexto">
       <div className="presentation-copy">
         <span className="presentation-kicker">Voz 1 · Territorio e historia</span>
-        <PresenterCard presenter={sections[0]} index={0} presentation />
         <h2>Un canal local que se reconoce en su ciudad</h2>
         <p>Telemedellín fue creado el <strong>13 de agosto de 1996</strong> y comenzó a emitir el <strong>7 de diciembre de 1997</strong>.</p>
         <div className="presentation-facts"><Stat value="1996" label="creación" /><Stat value="1997" label="señal al aire" tone="green" /><Stat value="28.000 m²" label="Canal Parque" tone="charcoal" /></div>
@@ -438,7 +437,6 @@ function PresentationMode({ onClose }: { onClose: () => void }) {
     <div className="presentation-layout diagnostic-slide" key="diagnostico">
       <div className="presentation-copy">
         <span className="presentation-kicker">Voz 2 · MIPG en cifras</span>
-        <PresenterCard presenter={sections[2]} index={2} number={2} presentation dark />
         <h2>El reto es demostrar la gestión con evidencia trazable</h2>
         <p>El promedio <strong>31,9/100</strong> corresponde únicamente a los ítems evidenciados; no es una medición definitiva de la madurez real del canal.</p>
       </div>
