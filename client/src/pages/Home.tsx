@@ -50,10 +50,6 @@ const sections = [
   { id: "ruta", short: "Ruta", label: "Acción y video", presenter: "Lui Guillermo Garcés Alvis", initials: "LG" },
 ];
 
-/** Secciones visibles en el banner; "estructura" queda oculta pero su código se conserva. */
-const HIDDEN_SECTION_IDS = new Set(["estructura"]);
-const visibleSections = sections.filter((section) => !HIDDEN_SECTION_IDS.has(section.id));
-
 const areas = [
   { name: "Contenidos y Distribución", layer: "Misional", x: "50%", y: "9%" },
   { name: "Producción", layer: "Misional", x: "88%", y: "50%" },
@@ -509,7 +505,7 @@ export default function Home() {
   const [active, setActive] = useState("contexto");
   const [menuOpen, setMenuOpen] = useState(false);
   const [presentationOpen, setPresentationOpen] = useState(false);
-  const activeIndex = useMemo(() => visibleSections.findIndex((item) => item.id === active), [active]);
+  const activeIndex = useMemo(() => sections.findIndex((item) => item.id === active), [active]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -555,29 +551,24 @@ export default function Home() {
   return (
     <div className="site-shell">
       <header className="topbar">
-        <div className="topbar-inner">
-          <a className="brand" href="#inicio" aria-label="Ir al inicio">
-            <img src={LOGO_URL} alt="Telemedellín — Aquí te ves" />
-          </a>
-          <nav className="desktop-nav" aria-label="Secciones de la webinfografía">
-            {visibleSections.map((item, index) => (
-              <button key={item.id} type="button" className={active === item.id ? "is-active" : ""} onClick={() => navigate(item.id)}>
-                <span>0{index + 1}</span>{item.short}
-              </button>
-            ))}
-          </nav>
-          <button className="presentation-launch" type="button" onClick={startPresentation}><PresentationIcon size={17} /><span>Presentar</span></button>
-          <button className="menu-button" type="button" aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)}>
-            <span /> <span />
-            <b>{menuOpen ? "Cerrar" : "Secciones"}</b>
-          </button>
-        </div>
-        <div className="voices-bar" aria-label="Participantes">
-          {sections.map((item) => <span key={item.id}>{item.presenter}</span>)}
-        </div>
+        <a className="brand" href="#inicio" aria-label="Ir al inicio">
+          <img src={LOGO_URL} alt="Telemedellín — Aquí te ves" />
+        </a>
+        <nav className="desktop-nav" aria-label="Secciones de la webinfografía">
+          {sections.map((item, index) => (
+            <button key={item.id} type="button" className={active === item.id ? "is-active" : ""} onClick={() => navigate(item.id)}>
+              <span>0{index + 1}</span>{item.short}
+            </button>
+          ))}
+        </nav>
+        <button className="presentation-launch" type="button" onClick={startPresentation}><PresentationIcon size={17} /><span>Presentar</span></button>
+        <button className="menu-button" type="button" aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)}>
+          <span /> <span />
+          <b>{menuOpen ? "Cerrar" : "Secciones"}</b>
+        </button>
         {menuOpen && (
           <div className="mobile-menu">
-            {visibleSections.map((item, index) => (
+            {sections.map((item, index) => (
               <button key={item.id} type="button" onClick={() => navigate(item.id)}>
                 <span>0{index + 1}</span>{item.label}<ChevronRight size={17} />
               </button>
@@ -587,11 +578,11 @@ export default function Home() {
       </header>
 
       <aside className="story-rail" aria-label="Progreso de la exposición">
-        <span className="rail-title">Voces</span>
+        <span className="rail-title">5 voces</span>
         <div className="rail-track">
-          <span style={{ transform: `scaleY(${Math.max(0, activeIndex) / Math.max(1, visibleSections.length - 1)})` }} />
+          <span style={{ transform: `scaleY(${Math.max(0, activeIndex) / 4})` }} />
         </div>
-        {visibleSections.map((item, index) => (
+        {sections.map((item, index) => (
           <button key={item.id} className={active === item.id ? "is-active" : ""} onClick={() => navigate(item.id)} aria-label={`Ir a la sección ${index + 1}: ${item.label}`}>
             {index + 1}
           </button>
@@ -626,9 +617,9 @@ export default function Home() {
             </Reveal>
           </div>
           <div className="speaker-strip">
-            {visibleSections.map((item, index) => (
+            {sections.map((item, index) => (
               <button key={item.id} type="button" onClick={() => navigate(item.id)}>
-                <span>Voz {index + 1}</span><strong>{item.label}</strong>
+                <span>Voz {index + 1}</span><strong>{item.label}</strong><em>{item.presenter}</em>
               </button>
             ))}
           </div>
@@ -637,6 +628,7 @@ export default function Home() {
         <section id="contexto" data-speaker className="section section-context">
           <div className="section-inner">
             <Reveal><Eyebrow number="01" speaker="Voz 1">Territorio e historia</Eyebrow></Reveal>
+            <Reveal className="presenter-card-wrap" delay={0.04}><PresenterCard presenter={sections[0]} index={0} /></Reveal>
             <div className="context-grid">
               <Reveal className="context-image">
                 <img src={PARK_URL} alt="Vista del Canal Parque Gabriel García Márquez de Telemedellín" />
@@ -673,6 +665,7 @@ export default function Home() {
         <section id="estructura" data-speaker hidden className="section section-structure">
           <div className="section-inner">
             <Reveal><Eyebrow number="02" speaker="Voz 2">Estructura TM 2026</Eyebrow></Reveal>
+            <Reveal className="presenter-card-wrap" delay={0.04}><PresenterCard presenter={sections[1]} index={1} /></Reveal>
             <Reveal>
               <SectionHeader
                 kicker="Arquitectura organizacional"
@@ -697,7 +690,8 @@ export default function Home() {
 
         <section id="diagnostico" data-speaker className="section section-diagnostic">
           <div className="section-inner">
-            <Reveal><Eyebrow number="02" speaker="Voz 2">MIPG en cifras</Eyebrow></Reveal>
+            <Reveal><Eyebrow number="03" speaker="Voz 3">MIPG en cifras</Eyebrow></Reveal>
+            <Reveal className="presenter-card-wrap" delay={0.04}><PresenterCard presenter={sections[2]} index={2} dark /></Reveal>
             <div className="diagnostic-heading-row">
               <Reveal>
                 <SectionHeader
@@ -778,7 +772,8 @@ export default function Home() {
 
         <section id="hallazgos" data-speaker className="section section-findings">
           <div className="section-inner">
-            <Reveal><Eyebrow number="03" speaker="Voz 3">Fortalezas y brechas</Eyebrow></Reveal>
+            <Reveal><Eyebrow number="04" speaker="Voz 4">Fortalezas y brechas</Eyebrow></Reveal>
+            <Reveal className="presenter-card-wrap" delay={0.04}><PresenterCard presenter={sections[3]} index={3} /></Reveal>
             <Reveal>
               <SectionHeader
                 kicker="Lo que ya existe y lo que falta conectar"
@@ -826,7 +821,8 @@ export default function Home() {
 
         <section id="ruta" data-speaker className="section section-route">
           <div className="section-inner">
-            <Reveal><Eyebrow number="04" speaker="Voz 4">Ruta de mejora y video</Eyebrow></Reveal>
+            <Reveal><Eyebrow number="05" speaker="Voz 5">Ruta de mejora y video</Eyebrow></Reveal>
+            <Reveal className="presenter-card-wrap" delay={0.04}><PresenterCard presenter={sections[4]} index={4} /></Reveal>
             <div className="route-grid">
               <div>
                 <Reveal>

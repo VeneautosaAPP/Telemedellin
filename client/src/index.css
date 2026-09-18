@@ -101,33 +101,16 @@ img { display: block; max-width: 100%; }
   position: fixed;
   inset: 0 0 auto;
   z-index: 50;
-  display: flex;
-  flex-direction: column;
-  background: rgba(255, 255, 255, 0.92);
-  border-bottom: 1px solid rgba(39, 39, 37, 0.1);
-  backdrop-filter: blur(18px);
-  box-shadow: 0 8px 32px rgba(33, 34, 27, 0.05);
-}
-.topbar-inner {
   height: 78px;
   display: flex;
   align-items: center;
   gap: 32px;
   padding: 0 max(24px, calc((100vw - 1320px) / 2));
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid rgba(39, 39, 37, 0.1);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 8px 32px rgba(33, 34, 27, 0.05);
 }
-.voices-bar {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  padding: 9px max(24px, calc((100vw - 1320px) / 2));
-  overflow-x: auto;
-  background: var(--ink);
-  color: #dcdcd4;
-  scrollbar-width: none;
-}
-.voices-bar::-webkit-scrollbar { display: none; }
-.voices-bar span { display: inline-flex; align-items: center; flex: 0 0 auto; font-size: 11px; font-weight: 600; white-space: nowrap; }
-.voices-bar span + span::before { content: "·"; margin: 0 14px; color: var(--tm-orange); }
 .brand { width: 186px; flex: 0 0 auto; }
 .brand img { width: 100%; height: auto; }
 .desktop-nav { margin-left: auto; display: flex; align-items: stretch; height: 100%; }
@@ -339,7 +322,7 @@ img { display: block; max-width: 100%; }
   position: relative;
   z-index: 3;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   background: var(--ink);
   color: white;
 }
@@ -356,7 +339,7 @@ img { display: block; max-width: 100%; }
 .speaker-strip span { display:block; color:var(--tm-orange); font-size:9px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }
 .speaker-strip strong { display:block; margin-top:4px; font-size:12px; }
 
-.section { position: relative; scroll-margin-top: 116px; padding: 112px 0; }
+.section { position: relative; scroll-margin-top: 76px; padding: 112px 0; }
 .section-inner { position: relative; z-index: 2; }
 .section-context { background: white; }
 .section-structure { background: var(--paper); }
@@ -576,23 +559,21 @@ footer { background:#1d1d1b; color:white; padding:45px 0; }
 }
 
 @media (max-width: 900px) {
-  .topbar-inner { height:68px; padding:0 20px; }
-  .voices-bar { padding:8px 20px; }
+  .topbar { height:68px; padding:0 20px; }
   .brand { width:154px; }
   .desktop-nav { display:none; }
   .menu-button { margin-left:auto; display:grid; grid-template-columns:24px auto; grid-template-rows:1fr 1fr; gap:5px 10px; align-items:center; }
   .menu-button span { grid-column:1; display:block; width:24px; height:2px; background:var(--ink); }
   .menu-button b { grid-column:2; grid-row:1/3; font-size:10px; text-transform:uppercase; letter-spacing:.08em; }
-  .mobile-menu { position:absolute; top:100%; left:0; right:0; display:grid; padding:16px 20px 20px; background:white; border-bottom:1px solid var(--line); box-shadow:0 20px 40px rgba(39,39,37,.14); }
+  .mobile-menu { position:absolute; top:68px; left:0; right:0; display:grid; padding:16px 20px 20px; background:white; border-bottom:1px solid var(--line); box-shadow:0 20px 40px rgba(39,39,37,.14); }
   .mobile-menu button { display:grid; grid-template-columns:32px 1fr auto; align-items:center; padding:13px 0; border:0; border-bottom:1px solid var(--line); background:white; text-align:left; font-size:13px; font-weight:700; }
   .mobile-menu button span { color:var(--tm-orange); font-size:9px; }
-  .section { scroll-margin-top:106px; }
-  .hero { padding-top:130px; }
+  .hero { padding-top:105px; }
   .hero-inner { grid-template-columns:1fr; min-height:auto; }
   .hero-copy { text-align:center; }
   .hero-copy > p { margin-inline:auto; }.hero-actions{justify-content:center}
   .hero-collage { width:min(640px,100%); margin:0 auto; }
-  .speaker-strip { grid-template-columns:repeat(4,minmax(145px,1fr)); overflow-x:auto; }
+  .speaker-strip { grid-template-columns:repeat(5,minmax(145px,1fr)); overflow-x:auto; }
   .context-grid, .route-grid { grid-template-columns:1fr; }
   .context-image { min-height:500px; order:2; }.context-copy{order:1}
   .diagnostic-heading-row { grid-template-columns:1fr; }.score-card{max-width:280px}
