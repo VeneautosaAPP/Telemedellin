@@ -50,6 +50,10 @@ const sections = [
   { id: "ruta", short: "Ruta", label: "Acción y video", presenter: "Lui Guillermo Garcés Alvis", initials: "LG" },
 ];
 
+/** Secciones fuera de la página y del modo presentación; su código se conserva. */
+const HIDDEN_SECTION_IDS = new Set(["estructura", "hallazgos", "ruta"]);
+const visibleSections = sections.filter((section) => !HIDDEN_SECTION_IDS.has(section.id));
+
 const areas = [
   { name: "Contenidos y Distribución", layer: "Misional", x: "50%", y: "9%" },
   { name: "Producción", layer: "Misional", x: "88%", y: "50%" },
@@ -171,11 +175,13 @@ function Eyebrow({ number, speaker, children }: { number: string; speaker: strin
 function PresenterCard({
   presenter,
   index,
+  number = index + 1,
   presentation = false,
   dark = false,
 }: {
   presenter: (typeof sections)[number];
   index: number;
+  number?: number;
   presentation?: boolean;
   dark?: boolean;
 }) {
@@ -183,7 +189,7 @@ function PresenterCard({
     <div className={`presenter-card presenter-card-${index + 1} ${presentation ? "is-presentation" : ""} ${dark ? "is-dark" : ""}`}>
       <div className="presenter-monogram" aria-hidden="true">
         <span>{presenter.initials}</span>
-        <i>0{index + 1}</i>
+        <i>0{number}</i>
       </div>
       <div className="presenter-identity">
         <small>Presenta esta sección</small>
@@ -367,7 +373,7 @@ function PresentationMode({ onClose }: { onClose: () => void }) {
   useEffect(() => {
     const move = (delta: number) => {
       setShowData(false);
-      setSlide((current) => Math.max(0, Math.min(sections.length - 1, current + delta)));
+      setSlide((current) => Math.max(0, Math.min(visibleSections.length - 1, current + delta)));
     };
     const handleKey = (event: KeyboardEvent) => {
       if (["ArrowRight", "ArrowDown", "PageDown"].includes(event.key)) {
@@ -383,7 +389,7 @@ function PresentationMode({ onClose }: { onClose: () => void }) {
       } else if (event.key === "End") {
         event.preventDefault();
         setShowData(false);
-        setSlide(sections.length - 1);
+        setSlide(visibleSections.length - 1);
       } else if (event.key.toLowerCase() === "d") {
         event.preventDefault();
         setShowData((visible) => !visible);
@@ -401,10 +407,10 @@ function PresentationMode({ onClose }: { onClose: () => void }) {
 
   const goTo = (index: number) => {
     setShowData(false);
-    setSlide(Math.max(0, Math.min(sections.length - 1, index)));
+    setSlide(Math.max(0, Math.min(visibleSections.length - 1, index)));
   };
 
-  const slideContent = [
+  const slideContentAll = [
     <div className="presentation-layout context-slide" key="contexto">
       <div className="presentation-copy">
         <span className="presentation-kicker">Voz 1 · Territorio e historia</span>
@@ -431,8 +437,8 @@ function PresentationMode({ onClose }: { onClose: () => void }) {
     </div>,
     <div className="presentation-layout diagnostic-slide" key="diagnostico">
       <div className="presentation-copy">
-        <span className="presentation-kicker">Voz 3 · MIPG en cifras</span>
-        <PresenterCard presenter={sections[2]} index={2} presentation dark />
+        <span className="presentation-kicker">Voz 2 · MIPG en cifras</span>
+        <PresenterCard presenter={sections[2]} index={2} number={2} presentation dark />
         <h2>El reto es demostrar la gestión con evidencia trazable</h2>
         <p>El promedio <strong>31,9/100</strong> corresponde únicamente a los ítems evidenciados; no es una medición definitiva de la madurez real del canal.</p>
       </div>
@@ -464,22 +470,26 @@ function PresentationMode({ onClose }: { onClose: () => void }) {
         {actions.map((action) => <div key={action.step}><span>{action.step}</span><div><strong>{action.title}</strong><p>{action.text}</p></div></div>)}
       </div>
     </div>,
-  ][slide];
+  ];
 
-  const slideData = [
+  const slideDataAll = [
     <div key="data-context"><strong>Datos para ampliar</strong><p>Telemedellín es una asociación sin ánimo de lucro entre entidades públicas municipales. El Canal Parque alberga 964 árboles de 137 especies y 69 especies de fauna, 58 de ellas aves.</p></div>,
     <div key="data-structure"><strong>Equipo directivo 2026</strong><div className="presentation-data-grid">{directors.map(([role, name]) => <p key={role}><span>{role}</span>{name}</p>)}</div></div>,
     <div key="data-mipg"><strong>Detalle de componentes</strong><div className="presentation-data-grid">{componentScores.map((item) => <p key={item.name}><span>{item.name}</span>{item.note} · {item.value ?? "Sin datos"}</p>)}</div></div>,
     <div key="data-findings"><strong>Cumplimiento Decreto 612 de 2018</strong><div className="presentation-data-grid">{decreePlans.map(([name, status]) => <p key={name}><span>{status}</span>{name}</p>)}</div></div>,
     <div key="data-route"><strong>Fuentes que deben integrarse</strong><div className="presentation-data-grid">{evidenceSources.map((source) => <p key={source}><Check size={14} />{source}</p>)}</div></div>,
-  ][slide];
+  ];
+
+  const slideOrder = visibleSections.map((item) => sections.findIndex((section) => section.id === item.id));
+  const slideContent = slideContentAll[slideOrder[slide]];
+  const slideData = slideDataAll[slideOrder[slide]];
 
   return (
-    <motion.div className={`presentation-overlay presentation-tone-${slide + 1}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} role="dialog" aria-modal="true" aria-label="Modo presentación">
+    <motion.div className={`presentation-overlay presentation-tone-${slideOrder[slide] + 1}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} role="dialog" aria-modal="true" aria-label="Modo presentación">
       <header className="presentation-header">
         <img src={LOGO_URL} alt="Telemedellín" />
         <div className="presentation-progress">
-          {sections.map((item, index) => <button key={item.id} className={index === slide ? "is-active" : ""} onClick={() => goTo(index)} aria-label={`Ir a ${item.label}`}><span>0{index + 1}</span>{item.short}</button>)}
+          {visibleSections.map((item, index) => <button key={item.id} className={index === slide ? "is-active" : ""} onClick={() => goTo(index)} aria-label={`Ir a ${item.label}`}><span>0{index + 1}</span>{item.short}</button>)}
         </div>
         <button type="button" className="presentation-close" onClick={onClose}><X size={20} /><span>Salir</span></button>
       </header>
@@ -494,8 +504,8 @@ function PresentationMode({ onClose }: { onClose: () => void }) {
       <footer className="presentation-controls">
         <button type="button" onClick={() => goTo(slide - 1)} disabled={slide === 0}><ChevronLeft size={20} /> Anterior</button>
         <button type="button" className={showData ? "is-active" : ""} onClick={() => setShowData((visible) => !visible)}><FileText size={18} /> {showData ? "Ocultar datos" : "Datos de apoyo"} <kbd>D</kbd></button>
-        <span><Keyboard size={17} /> Flechas para navegar · {slide + 1}/5</span>
-        <button type="button" onClick={() => goTo(slide + 1)} disabled={slide === sections.length - 1}>Siguiente <ChevronRight size={20} /></button>
+        <span><Keyboard size={17} /> Flechas para navegar · {slide + 1}/{visibleSections.length}</span>
+        <button type="button" onClick={() => goTo(slide + 1)} disabled={slide === visibleSections.length - 1}>Siguiente <ChevronRight size={20} /></button>
       </footer>
     </motion.div>
   );
@@ -505,7 +515,7 @@ export default function Home() {
   const [active, setActive] = useState("contexto");
   const [menuOpen, setMenuOpen] = useState(false);
   const [presentationOpen, setPresentationOpen] = useState(false);
-  const activeIndex = useMemo(() => sections.findIndex((item) => item.id === active), [active]);
+  const activeIndex = useMemo(() => visibleSections.findIndex((item) => item.id === active), [active]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -555,7 +565,7 @@ export default function Home() {
           <img src={LOGO_URL} alt="Telemedellín — Aquí te ves" />
         </a>
         <nav className="desktop-nav" aria-label="Secciones de la webinfografía">
-          {sections.map((item, index) => (
+          {visibleSections.map((item, index) => (
             <button key={item.id} type="button" className={active === item.id ? "is-active" : ""} onClick={() => navigate(item.id)}>
               <span>0{index + 1}</span>{item.short}
             </button>
@@ -568,7 +578,7 @@ export default function Home() {
         </button>
         {menuOpen && (
           <div className="mobile-menu">
-            {sections.map((item, index) => (
+            {visibleSections.map((item, index) => (
               <button key={item.id} type="button" onClick={() => navigate(item.id)}>
                 <span>0{index + 1}</span>{item.label}<ChevronRight size={17} />
               </button>
@@ -578,11 +588,11 @@ export default function Home() {
       </header>
 
       <aside className="story-rail" aria-label="Progreso de la exposición">
-        <span className="rail-title">5 voces</span>
+        <span className="rail-title">Voces</span>
         <div className="rail-track">
-          <span style={{ transform: `scaleY(${Math.max(0, activeIndex) / 4})` }} />
+          <span style={{ transform: `scaleY(${Math.max(0, activeIndex) / Math.max(1, visibleSections.length - 1)})` }} />
         </div>
-        {sections.map((item, index) => (
+        {visibleSections.map((item, index) => (
           <button key={item.id} className={active === item.id ? "is-active" : ""} onClick={() => navigate(item.id)} aria-label={`Ir a la sección ${index + 1}: ${item.label}`}>
             {index + 1}
           </button>
@@ -616,8 +626,14 @@ export default function Home() {
               <div className="year-card year-card-two"><strong>1997</strong><span>Señal al aire</span></div>
             </Reveal>
           </div>
+          <div className="hero-credits" aria-label="Participantes">
+            <span className="hero-credits-title"><Users size={15} /> Presentan</span>
+            {sections.map((item) => (
+              <span className="hero-credit" key={item.id}><i>{item.initials}</i>{item.presenter}</span>
+            ))}
+          </div>
           <div className="speaker-strip">
-            {sections.map((item, index) => (
+            {visibleSections.map((item, index) => (
               <button key={item.id} type="button" onClick={() => navigate(item.id)}>
                 <span>Voz {index + 1}</span><strong>{item.label}</strong><em>{item.presenter}</em>
               </button>
@@ -661,7 +677,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="estructura" data-speaker className="section section-structure">
+        {/* Sección oculta temporalmente; el código se conserva para reactivarla quitando el atributo `hidden`. */}
+        <section id="estructura" data-speaker hidden className="section section-structure">
           <div className="section-inner">
             <Reveal><Eyebrow number="02" speaker="Voz 2">Estructura TM 2026</Eyebrow></Reveal>
             <Reveal className="presenter-card-wrap" delay={0.04}><PresenterCard presenter={sections[1]} index={1} /></Reveal>
@@ -689,8 +706,8 @@ export default function Home() {
 
         <section id="diagnostico" data-speaker className="section section-diagnostic">
           <div className="section-inner">
-            <Reveal><Eyebrow number="03" speaker="Voz 3">MIPG en cifras</Eyebrow></Reveal>
-            <Reveal className="presenter-card-wrap" delay={0.04}><PresenterCard presenter={sections[2]} index={2} dark /></Reveal>
+            <Reveal><Eyebrow number="02" speaker="Voz 2">MIPG en cifras</Eyebrow></Reveal>
+            <Reveal className="presenter-card-wrap" delay={0.04}><PresenterCard presenter={sections[2]} index={2} number={2} dark /></Reveal>
             <div className="diagnostic-heading-row">
               <Reveal>
                 <SectionHeader
@@ -769,7 +786,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="hallazgos" data-speaker className="section section-findings">
+        {/* Sección oculta temporalmente; el código se conserva para reactivarla quitando el atributo `hidden`. */}
+        <section id="hallazgos" data-speaker hidden className="section section-findings">
           <div className="section-inner">
             <Reveal><Eyebrow number="04" speaker="Voz 4">Fortalezas y brechas</Eyebrow></Reveal>
             <Reveal className="presenter-card-wrap" delay={0.04}><PresenterCard presenter={sections[3]} index={3} /></Reveal>
@@ -818,7 +836,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="ruta" data-speaker className="section section-route">
+        {/* Sección oculta temporalmente; el código se conserva para reactivarla quitando el atributo `hidden`. */}
+        <section id="ruta" data-speaker hidden className="section section-route">
           <div className="section-inner">
             <Reveal><Eyebrow number="05" speaker="Voz 5">Ruta de mejora y video</Eyebrow></Reveal>
             <Reveal className="presenter-card-wrap" delay={0.04}><PresenterCard presenter={sections[4]} index={4} /></Reveal>
