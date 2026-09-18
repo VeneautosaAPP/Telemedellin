@@ -635,7 +635,7 @@ export default function Home() {
           <div className="speaker-strip">
             {visibleSections.map((item, index) => (
               <button key={item.id} type="button" onClick={() => navigate(item.id)}>
-                <span>Voz {index + 1}</span><strong>{item.label}</strong><em>{item.presenter}</em>
+                <span>Voz {index + 1}</span><strong>{item.label}</strong>
               </button>
             ))}
           </div>
@@ -644,7 +644,6 @@ export default function Home() {
         <section id="contexto" data-speaker className="section section-context">
           <div className="section-inner">
             <Reveal><Eyebrow number="01" speaker="Voz 1">Territorio e historia</Eyebrow></Reveal>
-            <Reveal className="presenter-card-wrap" delay={0.04}><PresenterCard presenter={sections[0]} index={0} /></Reveal>
             <div className="context-grid">
               <Reveal className="context-image">
                 <img src={PARK_URL} alt="Vista del Canal Parque Gabriel García Márquez de Telemedellín" />
@@ -707,7 +706,6 @@ export default function Home() {
         <section id="diagnostico" data-speaker className="section section-diagnostic">
           <div className="section-inner">
             <Reveal><Eyebrow number="02" speaker="Voz 2">MIPG en cifras</Eyebrow></Reveal>
-            <Reveal className="presenter-card-wrap" delay={0.04}><PresenterCard presenter={sections[2]} index={2} number={2} dark /></Reveal>
             <div className="diagnostic-heading-row">
               <Reveal>
                 <SectionHeader
