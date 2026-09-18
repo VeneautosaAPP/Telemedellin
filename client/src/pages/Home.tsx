@@ -19,7 +19,6 @@ import {
   Lightbulb,
   MapPin,
   MapPinned,
-  Maximize2,
   Mic2,
   Network,
   PauseCircle,
@@ -607,8 +606,6 @@ export default function Home() {
               <p>Una lectura visual de la organización 2026 y del diagnóstico de la Dimensión 1 del MIPG: <strong>Gestión Estratégica del Talento Humano.</strong></p>
               <div className="hero-actions">
                 <button type="button" className="primary-button" onClick={() => navigate("contexto")}>Iniciar recorrido <ArrowDown size={18} /></button>
-                <button type="button" className="presentation-hero-button" onClick={startPresentation}><Maximize2 size={17} /> Modo presentación</button>
-                <span><Users size={18} /> Diseñada para 5 expositores</span>
               </div>
             </Reveal>
             <Reveal className="hero-collage" delay={0.12}>
