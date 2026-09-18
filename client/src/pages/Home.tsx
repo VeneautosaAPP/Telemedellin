@@ -661,8 +661,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Sección oculta temporalmente; el código se conserva para reactivarla quitando el atributo `hidden`. */}
-        <section id="estructura" data-speaker hidden className="section section-structure">
+        <section id="estructura" data-speaker className="section section-structure">
           <div className="section-inner">
             <Reveal><Eyebrow number="02" speaker="Voz 2">Estructura TM 2026</Eyebrow></Reveal>
             <Reveal className="presenter-card-wrap" delay={0.04}><PresenterCard presenter={sections[1]} index={1} /></Reveal>
